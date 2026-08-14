@@ -1,0 +1,313 @@
+/* ---------------------------------------------------------------
+   Academic personal site — shared styles
+   --------------------------------------------------------------- */
+
+:root {
+  --page-width: 80%;
+  --page-max: 1080px;
+
+  /* profile photo edge length (square) */
+  --photo: clamp(120px, 14vw, 190px);
+
+  --ink: #1d1f21;
+  --ink-soft: #4a4f55;
+  --ink-faint: #7b8189;
+  --rule: #e2e5e8;
+  --bg: #ffffff;
+  --accent: #3c5a52;
+
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(60, 90, 82, 0.3);
+}
+
+a:hover { border-bottom-color: var(--accent); }
+
+/* --- page shell: centered 80% column ------------------------- */
+
+.page {
+  width: var(--page-width);
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding-bottom: 4rem;
+}
+
+/* --- cover ---------------------------------------------------- */
+
+.cover {
+  display: block;
+  width: 100%;
+  height: clamp(190px, 20vw, 330px);
+  /*height: clamp(190px, 24vw, 330px);*/
+  object-fit: cover;
+  object-position: center 65%;
+}
+
+/* --- identity block (photo + nav | name + blurb) -------------- */
+
+.identity {
+  display: grid;
+  /* spacer puts the photo's centre at 1/8 of the cover width,
+     i.e. the middle of the cover's first quarter */
+  grid-template-columns:
+    calc(12.5% - var(--photo) / 2)
+    var(--photo)
+    1fr;
+  column-gap: 2.2rem;
+}
+
+.identity__photo {
+  grid-column: 2;
+  width: var(--photo);
+  height: var(--photo);
+  /* lift the photo so its top quarter sits on the cover */
+  margin-top: calc(var(--photo) / -4);
+  object-fit: cover;
+  border-radius: 6px;
+  border: 4px solid #fff;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.18);
+  position: relative;
+  z-index: 1;
+}
+
+.identity__nav {
+  grid-column: 2;
+  margin: 1.4rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--serif);
+  font-size: 1.06rem;
+}
+
+.identity__nav li + li { margin-top: 0.45rem; }
+
+.identity__nav a {
+  border-bottom: none;
+  color: var(--ink);
+}
+
+.identity__nav a:hover,
+.identity__nav a[aria-current="page"] {
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent);
+}
+
+.identity__main {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  /* name sits a little lower than the top of the photo */
+  padding-top: calc(var(--photo) / 6);
+}
+
+.identity__name {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+  line-height: 1.15;
+  margin: 0 0 0.15rem;
+  letter-spacing: 0.01em;
+}
+
+.identity__role {
+  margin: 0 0 1.1rem;
+  color: var(--ink-faint);
+  font-size: 0.98rem;
+}
+
+.identity__blurb p { margin: 0 0 0.9rem; color: var(--ink-soft); }
+
+/* --- interior pages ------------------------------------------ */
+
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding: 1.6rem 0 1rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.topbar__name {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+.topbar__name a { color: var(--ink); border-bottom: none; }
+
+.topbar__links {
+  display: flex;
+  gap: 1.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--serif);
+}
+
+.topbar__links a { color: var(--ink); border-bottom: none; }
+
+.topbar__links a:hover,
+.topbar__links a[aria-current="page"] {
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent);
+}
+
+.content { padding-top: 2.2rem; }
+
+.content h1 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+  margin: 0 0 1.2rem;
+}
+
+.content h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.5rem;
+  margin: 2.2rem 0 0.6rem;
+}
+
+.content p { margin: 0 0 1rem; color: var(--ink-soft); }
+
+.content ul { margin: 0 0 1rem; padding-left: 1.2rem; color: var(--ink-soft); }
+
+.content li { margin-bottom: 0.4rem; }
+
+.item { margin-bottom: 1.4rem; }
+
+.item__title { font-weight: 600; color: var(--ink); }
+
+.item__meta { color: var(--ink-soft); font-size: 1rem; margin-top: 0.15rem; }
+
+.item__desc { margin: 0.4rem 0 0; color: var(--ink-soft); font-size: 0.95rem; }
+
+.item__facts {
+  list-style: none;
+  margin: 0.35rem 0 0;
+  padding: 0;
+}
+
+.item__facts li {
+  position: relative;
+  padding-left: 1.2em;
+  margin-top: 0.3rem;
+  color: var(--ink-soft);
+  font-size: 0.96rem;
+}
+
+.item__facts li::before {
+  content: "\25B8";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+.item__facts strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.item__link {
+  display: inline-block;
+  margin-top: 0.2rem;
+  font-size: 0.92rem;
+}
+
+/* --- PhD manuscript: set apart from the regular item list ----- */
+
+.manuscript {
+  margin: 0 0 1.6rem;
+  padding: 1.15rem 1.35rem;
+  border-left: 3px solid var(--accent);
+  background: rgba(60, 90, 82, 0.06);
+  border-radius: 0 8px 8px 0;
+}
+
+.manuscript__title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+.manuscript__meta {
+  margin-top: 0.3rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.manuscript__desc {
+  margin: 0.55rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.manuscript__link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.92rem;
+}
+
+/* --- footer --------------------------------------------------- */
+
+.footer {
+  margin-top: 3.5rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--rule);
+  color: var(--ink-faint);
+  font-size: 0.9rem;
+}
+
+/* --- small screens: stack and centre -------------------------- */
+
+@media (max-width: 720px) {
+  :root {
+    --page-width: 90%;
+    --photo: 140px;
+  }
+
+  .identity {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .identity__photo,
+  .identity__nav,
+  .identity__main {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .identity__nav {
+    display: flex;
+    gap: 1.3rem;
+    margin-top: 1rem;
+  }
+
+  .identity__nav li + li { margin-top: 0; }
+
+  .identity__main { padding-top: 1.4rem; }
+}
