@@ -9,6 +9,10 @@
   /* profile photo edge length (square) */
   --photo: clamp(120px, 14vw, 190px);
 
+  /* cover height, and how far the photo hangs over its bottom edge */
+  --cover-h: clamp(190px, 20vw, 330px);
+  --overlap: calc(var(--photo) / 3);
+
   --ink: #1d1f21;
   --ink-soft: #4a4f55;
   --ink-faint: #7b8189;
@@ -55,10 +59,14 @@ a:hover { border-bottom-color: var(--accent); }
 .cover {
   display: block;
   width: 100%;
-  height: clamp(190px, 20vw, 330px);
-  /*height: clamp(190px, 24vw, 330px);*/
+  height: var(--cover-h);
   object-fit: cover;
   object-position: center 65%;
+  /* scrolls away until a strip stays pinned at the top: half an overlap
+     above the photo, plus the overlap behind the photo's top third */
+  position: sticky;
+  top: calc(var(--overlap) * 1.5 - var(--cover-h));
+  z-index: 0;
 }
 
 /* --- identity block (photo + nav | name + blurb) -------------- */
@@ -71,31 +79,32 @@ a:hover { border-bottom-color: var(--accent); }
     calc(12.5% - var(--photo) / 2)
     var(--photo)
     1fr;
-  /* row 1 is exactly the photo's height; the tall content column may
-     only grow row 2, so the nav never drifts down the page */
-  grid-template-rows: max-content 1fr;
   column-gap: 2.2rem;
+  /* lifts the whole block so the photo's top third sits on the cover */
+  margin-top: calc(var(--overlap) * -1);
+}
+
+/* photo + nav travel together and stick with half an overlap of cover
+   still showing above the photo */
+.identity__side {
+  grid-column: 2;
+  align-self: start;
+  position: sticky;
+  top: calc(var(--overlap) / 2);
+  z-index: 2;
 }
 
 .identity__photo {
-  grid-column: 2;
+  display: block;
   width: var(--photo);
   height: var(--photo);
-  /* lift the photo so its top third sits on the cover */
-  margin-top: calc(var(--photo) / -3);
   object-fit: cover;
   border-radius: 6px;
   border: 4px solid #fff;
   box-shadow: 0 2px 14px rgba(0, 0, 0, 0.18);
-  position: relative;
-  z-index: 1;
 }
 
 .identity__nav {
-  grid-column: 2;
-  /* keep the buttons packed under the photo instead of stretching
-     to fill the row when the content column is tall */
-  align-self: start;
   display: grid;
   gap: 0.5rem;
   /* the buttons line up with the photo's edges */
@@ -149,9 +158,19 @@ a:hover { border-bottom-color: var(--accent); }
 
 .identity__main {
   grid-column: 3;
-  grid-row: 1 / span 2;
-  /* name sits a little lower than the top of the photo */
-  padding-top: calc(var(--photo) / 6);
+  /* cancels the block's negative margin */
+  padding-top: var(--overlap);
+}
+
+/* name + role stay put too, just below the pinned strip of cover */
+.identity__header {
+  position: sticky;
+  top: calc(var(--overlap) * 1.5);
+  z-index: 1;
+  background: var(--bg);
+  /* drops the name a little lower than the top of the photo, and keeps
+     the content from touching the role line as it slides underneath */
+  padding: calc(var(--photo) / 12) 0 1rem;
 }
 
 .identity__name {
@@ -164,7 +183,7 @@ a:hover { border-bottom-color: var(--accent); }
 }
 
 .identity__role {
-  margin: 0 0 1.1rem;
+  margin: 0;
   color: var(--ink-faint);
   font-size: 0.98rem;
 }
@@ -183,6 +202,10 @@ a:hover { border-bottom-color: var(--accent); }
   font-size: 1.5rem;
   margin: 2.2rem 0 0.6rem;
 }
+
+/* the intro line (Detailed CV / Google Scholar) sits closer to the
+   first section heading than the sections sit to each other */
+.content > p:first-child + h2 { margin-top: 1rem; }
 
 .content p { margin: 0 0 1rem; color: var(--ink-soft); }
 
@@ -286,16 +309,27 @@ a:hover { border-bottom-color: var(--accent); }
 
   .identity {
     grid-template-columns: 1fr;
-    grid-template-rows: auto;
     justify-items: center;
     text-align: center;
   }
 
-  .identity__photo,
-  .identity__nav,
-  .identity__main {
+  /* nothing sticks on a small screen — the page just scrolls */
+  .cover { position: static; }
+
+  .identity__side,
+  .identity__main,
+  .identity__header {
     grid-column: 1;
-    grid-row: auto;
+    position: static;
+  }
+
+  .identity__header { padding: 0 0 0.6rem; }
+
+  .identity__side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
   }
 
   .identity__nav {
