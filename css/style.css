@@ -13,6 +13,11 @@
   --cover-h: clamp(190px, 20vw, 330px);
   --overlap: calc(var(--photo) / 3);
 
+  /* height of the strip of cover left pinned at the top of the screen.
+     every sticky offset is derived from it, so animating this one value
+     collapses the whole pinned band together (see "reading mode" below) */
+  --band: calc(var(--overlap) * 1.5);
+
   --ink: #1d1f21;
   --ink-soft: #4a4f55;
   --ink-faint: #7b8189;
@@ -66,7 +71,7 @@ a:hover { border-bottom-color: var(--accent); }
   /* scrolls away until a strip stays pinned at the top: half an overlap
      above the photo, plus the overlap behind the photo's top third */
   position: sticky;
-  top: calc(var(--overlap) * 1.5 - var(--cover-h));
+  top: calc(var(--band) - var(--cover-h));
   /* above the content, which includes relatively positioned list items
      that would otherwise paint over the cover */
   z-index: 1;
@@ -93,7 +98,7 @@ a:hover { border-bottom-color: var(--accent); }
   grid-column: 2;
   align-self: start;
   position: sticky;
-  top: calc(var(--overlap) / 2);
+  top: calc(var(--band) / 3);
   z-index: 3;
 }
 
@@ -168,7 +173,7 @@ a:hover { border-bottom-color: var(--accent); }
 /* name + role stay put too, just below the pinned strip of cover */
 .identity__header {
   position: sticky;
-  top: calc(var(--overlap) * 1.5);
+  top: var(--band);
   z-index: 2;
   background: var(--bg);
   /* drops the name a little lower than the top of the photo, and keeps
@@ -300,6 +305,58 @@ a:hover { border-bottom-color: var(--accent); }
   border-top: 1px solid var(--rule);
   color: var(--ink-faint);
   font-size: 0.9rem;
+}
+
+/* --- reading mode: the pinned band shrinks once it sticks ------
+   A scroll-driven animation (no JavaScript): over the 150px of scrolling
+   that follows the moment everything pins, the strip of cover thins, the
+   name shrinks and the role line fades out — handing roughly 130px of
+   height back to the content. Browsers without scroll-driven animations
+   simply keep the full-size band.                                      */
+
+@property --band {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+@keyframes band-collapse {
+  to { --band: calc(var(--overlap) * 0.5); }
+}
+
+@keyframes header-collapse {
+  to { padding: 0 0 0.55rem; }
+}
+
+@keyframes name-collapse {
+  to { font-size: 1.45rem; }
+}
+
+@keyframes role-collapse {
+  to { opacity: 0; font-size: 0.01rem; }
+}
+
+@media (min-width: 721px) and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    html,
+    .identity__header,
+    .identity__name,
+    .identity__role {
+      animation-timeline: scroll(root block);
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      /* starts exactly where the band pins, ends 150px later */
+      animation-range:
+        calc(var(--cover-h) - var(--overlap) * 1.5)
+        calc(var(--cover-h) - var(--overlap) * 1.5 + 150px);
+    }
+
+    html { animation-name: band-collapse; }
+    .identity__header { animation-name: header-collapse; }
+    .identity__name { animation-name: name-collapse; }
+    .identity__role { animation-name: role-collapse; }
+  }
 }
 
 /* --- small screens: stack and centre -------------------------- */
