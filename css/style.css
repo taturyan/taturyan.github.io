@@ -76,10 +76,10 @@ a:hover { border-bottom-color: var(--accent); }
 
 .identity {
   display: grid;
-  /* spacer puts the photo's centre at 1/8 of the cover width,
-     i.e. the middle of the cover's first quarter */
+  /* spacer puts the photo's centre a little left of 1/8 of the cover
+     width, i.e. just left of the middle of the cover's first quarter */
   grid-template-columns:
-    calc(12.5% - var(--photo) / 2)
+    calc(9.5% - var(--photo) / 2)
     var(--photo)
     1fr;
   column-gap: 2.2rem;
