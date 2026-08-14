@@ -67,7 +67,9 @@ a:hover { border-bottom-color: var(--accent); }
      above the photo, plus the overlap behind the photo's top third */
   position: sticky;
   top: calc(var(--overlap) * 1.5 - var(--cover-h));
-  z-index: 0;
+  /* above the content, which includes relatively positioned list items
+     that would otherwise paint over the cover */
+  z-index: 1;
 }
 
 /* --- identity block (photo + nav | name + blurb) -------------- */
@@ -92,7 +94,7 @@ a:hover { border-bottom-color: var(--accent); }
   align-self: start;
   position: sticky;
   top: calc(var(--overlap) / 2);
-  z-index: 2;
+  z-index: 3;
 }
 
 .identity__photo {
@@ -167,7 +169,7 @@ a:hover { border-bottom-color: var(--accent); }
 .identity__header {
   position: sticky;
   top: calc(var(--overlap) * 1.5);
-  z-index: 1;
+  z-index: 2;
   background: var(--bg);
   /* drops the name a little lower than the top of the photo, and keeps
      the content from touching the role line as it slides underneath */
