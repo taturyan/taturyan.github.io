@@ -255,6 +255,13 @@ a:hover { border-bottom-color: var(--accent); }
   color: var(--ink);
 }
 
+/* short facts that read better side by side, e.g. languages */
+.item__facts--inline {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1.6rem;
+}
+
 .item__link {
   display: inline-block;
   margin-top: 0.2rem;
