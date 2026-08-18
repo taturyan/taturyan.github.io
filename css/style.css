@@ -1,22 +1,19 @@
 /* ---------------------------------------------------------------
    Academic personal site — shared styles
+   Experimental layout: centred hero (photo + name on the cover),
+   horizontal tab bar, full-width content.
    --------------------------------------------------------------- */
 
 :root {
-  --page-width: 84%;
+  --page-width: 80%;
   --page-max: 1080px;
 
-  /* profile photo edge length (square) */
-  --photo: clamp(120px, 14vw, 190px);
+  /* never taller than a x-th of the screen */
+  --cover-h: min(50vh, clamp(200px, 20vw, 320px));
 
-  /* cover height, and how far the photo hangs over its bottom edge */
-  --cover-h: clamp(190px, 20vw, 330px);
-  --overlap: calc(var(--photo) / 3);
-
-  /* height of the strip of cover left pinned at the top of the screen.
-     every sticky offset is derived from it, so animating this one value
-     collapses the whole pinned band together (see "reading mode" below) */
-  --band: calc(var(--overlap) * 1.5);
+  /* the photo sits in a single row beside the name, so it stays well
+     inside the cover without having to scale with it */
+  --photo: clamp(88px, 9vw, 118px);
 
   --ink: #1d1f21;
   --ink-soft: #4a4f55;
@@ -32,7 +29,16 @@
 
 * { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  /* always reserve the scrollbar's width, so short pages (home,
+     teaching) are laid out at the same width as long ones */
+  scrollbar-gutter: stable;
+}
+
+@supports not (scrollbar-gutter: stable) {
+  html { overflow-y: scroll; }
+}
 
 body {
   margin: 0;
@@ -58,149 +64,125 @@ a:hover { border-bottom-color: var(--accent); }
   max-width: var(--page-max);
   margin: 0 auto;
   padding-bottom: 1rem;
+  /* fills the screen so the footer can sit at the bottom of short
+     pages, and simply follows the content on long ones */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
-/* --- cover ---------------------------------------------------- */
+/* --- hero: photo + name centred on the cover ------------------ */
 
-.cover {
-  display: block;
-  width: 100%;
+/* The image is taken out of flow and pinned to the hero's exact box, so
+   its height is always definite. That is what lets object-fit actually
+   engage: as a grid/flex child with a percentage height it fell back to
+   its natural height and got clipped from the bottom instead. */
+.hero {
+  position: relative;
   height: var(--cover-h);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  object-position: center 65%;
-  /* scrolls away until a strip stays pinned at the top: half an overlap
-     above the photo, plus the overlap behind the photo's top third */
-  position: sticky;
-  top: calc(var(--band) - var(--cover-h));
-  /* above the content, which includes relatively positioned list items
-     that would otherwise paint over the cover */
+  /* equal trim off the top and bottom */
+  object-position: center;
+}
+
+/* photo and name side by side, as one centred group — a short row
+   leaves the middle of the cover visible around it */
+.hero__inner {
+  position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  padding: 1rem;
+  /* sits a little above the middle of the cover */
+  margin-bottom: calc(var(--cover-h) * 0.13);
 }
 
-/* --- identity block (photo + nav | name + blurb) -------------- */
-
-.identity {
-  display: grid;
-  /* spacer puts the photo's centre a little left of 1/8 of the cover
-     width, i.e. just left of the middle of the cover's first quarter */
-  grid-template-columns:
-    calc(9.5% - var(--photo) / 2)
-    var(--photo)
-    1fr;
-  column-gap: 2.2rem;
-  /* lifts the whole block so the photo's top third sits on the cover */
-  margin-top: calc(var(--overlap) * -1);
-}
-
-/* photo + nav travel together and stick with half an overlap of cover
-   still showing above the photo */
-.identity__side {
-  grid-column: 2;
-  align-self: start;
-  position: sticky;
-  top: calc(var(--band) / 3);
-  z-index: 3;
-}
-
-.identity__photo {
-  display: block;
+.hero__photo {
+  flex: none;
   width: var(--photo);
   height: var(--photo);
   object-fit: cover;
-  border-radius: 6px;
-  border: 4px solid #fff;
-  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.18);
+  border-radius: 50%;
+  border: 2.5px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
 }
 
-.identity__nav {
-  display: grid;
-  gap: 0.5rem;
-  /* the buttons line up with the photo's edges */
-  width: var(--photo);
-  margin: 1.3rem 0 0;
-  padding: 0;
-  list-style: none;
+.hero__text { text-align: center; }
+
+.hero__name {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.6rem, 2.8vw, 2.3rem);
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  color: #fff;
+  margin: 0 0 0.25rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55), 0 2px 16px rgba(0, 0, 0, 0.45);
 }
 
-.identity__nav a {
+.hero__role {
+  margin: 0;
+  font-size: 0.94rem;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6), 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* --- tab bar under the cover ---------------------------------- */
+
+.tabs {
+  position: sticky;
+  top: 0;
+  z-index: 5;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+}
+
+.tabs a {
+  padding: 0.85rem 1.5rem;
   font-family: var(--serif);
   font-size: 1.06rem;
+  color: var(--ink-soft);
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.tabs a:hover {
   color: var(--accent-strong);
-  background: rgba(60, 90, 82, 0.06);
-  border: 1px solid rgba(60, 90, 82, 0.26);
-  border-radius: 6px;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  background: rgba(60, 90, 82, 0.05);
 }
 
-.identity__nav a::after {
-  content: "\2192"; /* → */
-  opacity: 0.55;
-  transition: transform 0.15s ease, opacity 0.15s ease;
+.tabs a[aria-current="page"] {
+  color: var(--accent-strong);
+  border-bottom-color: var(--accent);
 }
 
-.identity__nav a:hover {
-  background: rgba(60, 90, 82, 0.12);
-  border-color: var(--accent);
+/* --- page content --------------------------------------------- */
+
+.content {
+  padding-top: 1.8rem;
+  /* takes up the leftover height, pushing the footer down */
+  flex: 1;
 }
-
-.identity__nav a:hover::after {
-  opacity: 1;
-  transform: translateX(2px);
-}
-
-/* the page you are already on */
-.identity__nav a[aria-current="page"] {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-  font-weight: 500;
-  cursor: default;
-}
-
-.identity__nav a[aria-current="page"]::after { content: none; }
-
-.identity__main {
-  grid-column: 3;
-  /* cancels the block's negative margin */
-  padding-top: var(--overlap);
-}
-
-/* name + role stay put too, just below the pinned strip of cover */
-.identity__header {
-  position: sticky;
-  top: var(--band);
-  z-index: 2;
-  background: var(--bg);
-  /* drops the name a little lower than the top of the photo, and keeps
-     the content from touching the role line as it slides underneath */
-  padding: calc(var(--photo) / 12) 0 1rem;
-}
-
-.identity__name {
-  font-family: var(--serif);
-  font-weight: 500;
-  font-size: clamp(1.9rem, 3.4vw, 2.7rem);
-  line-height: 1.15;
-  margin: 0 0 0.15rem;
-  letter-spacing: 0.01em;
-}
-
-.identity__role {
-  margin: 0;
-  color: var(--ink-faint);
-  font-size: 0.98rem;
-}
-
-.identity__blurb p { margin: 0 0 0.9rem; color: var(--ink-soft); }
-
-/* --- page content (sits in the identity block's right column) -- */
-
-.content { display: block; padding-top: 0.3rem; }
 
 .content > :first-child { margin-top: 0; }
 
@@ -314,107 +296,18 @@ a:hover { border-bottom-color: var(--accent); }
   font-size: 0.9rem;
 }
 
-/* --- reading mode: the pinned band shrinks once it sticks ------
-   A scroll-driven animation (no JavaScript): over the 150px of scrolling
-   that follows the moment everything pins, the strip of cover thins, the
-   name shrinks and the role line fades out — handing roughly 130px of
-   height back to the content. Browsers without scroll-driven animations
-   simply keep the full-size band.                                      */
-
-@property --band {
-  syntax: "<length>";
-  inherits: true;
-  initial-value: 0px;
-}
-
-@keyframes band-collapse {
-  to { --band: calc(var(--overlap) * 0.5); }
-}
-
-@keyframes header-collapse {
-  to { padding: 0 0 0.55rem; }
-}
-
-@keyframes name-collapse {
-  to { font-size: 1.45rem; }
-}
-
-@keyframes role-collapse {
-  to { opacity: 0; font-size: 0.01rem; }
-}
-
-@media (min-width: 721px) and (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: scroll()) {
-    html,
-    .identity__header,
-    .identity__name,
-    .identity__role {
-      animation-timeline: scroll(root block);
-      animation-duration: auto;
-      animation-timing-function: linear;
-      animation-fill-mode: both;
-      /* starts exactly where the band pins, ends 150px later */
-      animation-range:
-        calc(var(--cover-h) - var(--overlap) * 1.5)
-        calc(var(--cover-h) - var(--overlap) * 1.5 + 150px);
-    }
-
-    html { animation-name: band-collapse; }
-    .identity__header { animation-name: header-collapse; }
-    .identity__name { animation-name: name-collapse; }
-    .identity__role { animation-name: role-collapse; }
-  }
-}
-
-/* --- small screens: stack and centre -------------------------- */
+/* --- small screens -------------------------------------------- */
 
 @media (max-width: 720px) {
   :root {
     --page-width: 90%;
-    --photo: 140px;
+    /* --photo is left alone: it already scales off --cover-h, which
+       keeps responding correctly to the 33vh cap on short screens */
   }
 
-  .identity {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    text-align: center;
-  }
+  .hero__inner { gap: 0.9rem; }
 
-  /* nothing sticks on a small screen — the page just scrolls */
-  .cover { position: static; }
+  .tabs a { padding: 0.7rem 0.85rem; font-size: 1rem; }
 
-  .identity__side,
-  .identity__main,
-  .identity__header {
-    grid-column: 1;
-    position: static;
-  }
-
-  .identity__header { padding: 0 0 0.6rem; }
-
-  .identity__side {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-  }
-
-  .identity__nav {
-    display: flex;
-    gap: 0.6rem;
-    width: 100%;
-    max-width: 340px;
-    margin-top: 1.2rem;
-  }
-
-  .identity__nav li { flex: 1; }
-
-  .identity__nav a { justify-content: center; padding: 0.5rem 0.4rem; }
-
-  .identity__nav a::after { display: none; }
-
-  .identity__main { padding-top: 1.4rem; }
-
-  /* long-form content stays left-aligned even though the header centres */
-  .content { text-align: left; }
+  .content { padding-top: 1.4rem; }
 }

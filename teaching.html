@@ -8,35 +8,31 @@
   </head>
   <body>
     <div class="page">
-      <img class="cover" src="imgs/cover.jpg" alt="" />
-
-      <div class="identity">
-        <div class="identity__side">
-          <img class="identity__photo" src="imgs/photo.jpg" alt="Gayane Taturyan" />
-
-          <ul class="identity__nav">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="bio.html">Bio</a></li>
-            <li><a href="research.html">Research</a></li>
-            <li><a href="teaching.html" aria-current="page">Teaching</a></li>
-          </ul>
-        </div>
-
-        <div class="identity__main">
-          <div class="identity__header">
-            <h1 class="identity__name">Gayane Taturyan</h1>
-            <p class="identity__role">Postdoc &middot; S2A, LTCI &middot; Télécom Paris</p>
+      <header class="hero">
+        <img class="hero__cover" src="imgs/cover.jpg" alt="" />
+        <div class="hero__inner">
+          <img class="hero__photo" src="imgs/photo.jpg" alt="Gayane Taturyan" />
+          <div class="hero__text">
+            <h1 class="hero__name">Gayane Taturyan</h1>
+            <p class="hero__role">Postdoc &middot; S2A, LTCI &middot; Télécom Paris</p>
           </div>
-
-          <main class="content">
-            <h2>Courses</h2>
-            <div class="item">
-              <div class="item__title">Optimization under Fairness Constraints (Responsible AI)</div>
-              <div class="item__meta">Institut Polytechnique de Paris &middot; M2 Data Science &middot; 2026</div>
-            </div>
-          </main>
         </div>
-      </div>
+      </header>
+
+      <nav class="tabs">
+        <a href="index.html">Home</a>
+        <a href="bio.html">Bio</a>
+        <a href="research.html">Research</a>
+        <a href="teaching.html" aria-current="page">Teaching</a>
+      </nav>
+
+      <main class="content">
+        <h2>Courses</h2>
+        <div class="item">
+          <div class="item__title">Optimization under Fairness Constraints (Responsible AI)</div>
+          <div class="item__meta">Institut Polytechnique de Paris &middot; M2 Data Science &middot; 2026</div>
+        </div>
+      </main>
 
       <footer class="footer">
         &copy; 2026 Gayane Taturyan
