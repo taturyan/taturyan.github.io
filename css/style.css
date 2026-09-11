@@ -20,6 +20,16 @@
   --ink-faint: #7b8189;
   --rule: #e2e5e8;
   --bg: #ffffff;
+  /* the very light ground the white sheet sits on */
+  /* --page-bg: #eff2f1; */
+  --page-bg: #fafafa35;
+  /* gap below the sheet, between it and the viewport edge */
+  --sheet-margin: 0rem;
+  /* inset of the content from the sheet's own left and right edges */
+  --sheet-pad: 1.6rem;
+  /* corner roundness of the sheet, top and bottom independently */
+  --sheet-round-top: 0px;
+  --sheet-round-bottom: 0px;
   --accent: #3c5a52;
   --accent-strong: #29403a;
 
@@ -42,7 +52,7 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--page-bg);
   color: var(--ink);
   font-family: var(--sans);
   font-size: 17px;
@@ -62,14 +72,18 @@ a:hover { border-bottom-color: var(--accent); }
 .page {
   width: var(--page-width);
   max-width: var(--page-max);
-  margin: 0 auto;
+  /* a white sheet floating on the page background */
+  margin: 0 auto var(--sheet-margin);
+  background: var(--bg);
+  border-radius: var(--sheet-round-top) var(--sheet-round-top) var(--sheet-round-bottom) var(--sheet-round-bottom);
+  box-shadow: 0 1px 2px rgba(24, 32, 29, 0.05), 0 10px 34px rgba(24, 32, 29, 0.07);
   padding-bottom: 1rem;
   /* fills the screen so the footer can sit at the bottom of short
      pages, and simply follows the content on long ones */
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  min-height: 100dvh;
+  min-height: calc(100vh - var(--sheet-margin));
+  min-height: calc(100dvh - var(--sheet-margin));
 }
 
 /* --- hero: photo + name centred on the cover ------------------ */
@@ -80,6 +94,8 @@ a:hover { border-bottom-color: var(--accent); }
    its natural height and got clipped from the bottom instead. */
 .hero {
   position: relative;
+  /* follows the sheet's rounded top corners */
+  border-radius: var(--sheet-round-top) var(--sheet-round-top) 0 0;
   height: var(--cover-h);
   overflow: hidden;
   display: flex;
@@ -179,7 +195,8 @@ a:hover { border-bottom-color: var(--accent); }
 /* --- page content --------------------------------------------- */
 
 .content {
-  padding-top: 1.8rem;
+  /* keeps text off the sheet edges */
+  padding: 1.8rem var(--sheet-pad) 0;
   /* takes up the leftover height, pushing the footer down */
   flex: 1;
 }
@@ -289,8 +306,9 @@ a:hover { border-bottom-color: var(--accent); }
 /* --- footer --------------------------------------------------- */
 
 .footer {
-  margin-top: 3.5rem;
-  padding-top: 1rem;
+  /* the rule spans the full sheet width; only the text is inset */
+  margin: 3.5rem 0 0;
+  padding: 1rem var(--sheet-pad) 0;
   border-top: 1px solid var(--rule);
   color: var(--ink-faint);
   font-size: 0.9rem;
@@ -301,6 +319,8 @@ a:hover { border-bottom-color: var(--accent); }
 @media (max-width: 720px) {
   :root {
     --page-width: 90%;
+    --sheet-margin: 0rem;
+    --sheet-pad: 1.1rem;
     /* --photo is left alone: it already scales off --cover-h, which
        keeps responding correctly to the 33vh cap on short screens */
   }
@@ -310,4 +330,5 @@ a:hover { border-bottom-color: var(--accent); }
   .tabs a { padding: 0.7rem 0.85rem; font-size: 1rem; }
 
   .content { padding-top: 1.4rem; }
+
 }
