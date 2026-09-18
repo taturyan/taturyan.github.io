@@ -335,7 +335,8 @@ a:hover { border-bottom-color: var(--accent); }
 
 .item__link {
   display: inline-block;
-  margin-top: 0.2rem;
+  transform: translateY(-1px);
+  margin-inline-start: 0.65rem;
   font-size: 0.9375rem;
 }
 
@@ -373,7 +374,8 @@ a:hover { border-bottom-color: var(--accent); }
 
 .manuscript__link {
   display: inline-block;
-  margin-top: 0.2rem;
+  transform: translateY(-1px);
+  margin-inline-start: 0.65rem;
   font-size: 0.9375rem;
 }
 
