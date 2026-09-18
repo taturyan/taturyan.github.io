@@ -21,7 +21,7 @@
   --rule: #e2e5e8;
   --bg: #ffffff;
   /* the very light ground the white sheet sits on */
-  /* --page-bg: #eff2f1; */
+  /* --page-bg: #fafafa35; */
   --page-bg: #fafafa35;
   /* gaps above and below the sheet, between it and the viewport edges */
   --sheet-margin: 1rem;
@@ -298,13 +298,12 @@ a:hover { border-bottom-color: var(--accent); }
 }
 
 .item__facts li::before {
-  content: "";
+  content: "\2013";
   position: absolute;
   inset-inline-start: 0;
-  top: 0.875em;
-  width: 0.4em;
-  height: 1px;
-  background: var(--ink-faint);
+  top: 0;
+  color: var(--ink-faint);
+  font-weight: 400;
 }
 
 .item__facts strong {
@@ -320,6 +319,8 @@ a:hover { border-bottom-color: var(--accent); }
 }
 
 .item__facts--inline li::before {
+  content: "";
+  top: 0.875em;
   transform: translateY(-50%);
   width: 0.3rem;
   height: 0.3rem;
@@ -346,14 +347,15 @@ a:hover { border-bottom-color: var(--accent); }
 
 .manuscript__title {
   font-family: var(--font);
-  font-style: italic;
-  font-weight: 400;
+  /*font-style: italic;*/
+  font-weight: 500;
   font-size: 1.0625rem;
   line-height: 1.5;
   color: var(--ink);
 }
 
 .manuscript__meta {
+  line-height: 1.65;
   margin-top: 0.3rem;
   color: var(--ink-soft);
   font-size: 0.9375rem;
@@ -367,7 +369,7 @@ a:hover { border-bottom-color: var(--accent); }
 
 .manuscript__link {
   display: inline-block;
-  margin-top: 0.65rem;
+  margin-top: 0.2rem;
   font-size: 0.9375rem;
 }
 
