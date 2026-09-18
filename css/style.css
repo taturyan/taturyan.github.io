@@ -386,8 +386,8 @@ a:hover { border-bottom-color: var(--accent); }
 
 @media (max-width: 720px) {
   :root {
-    --page-width: 90%;
-    --sheet-margin: 0.6rem;
+    --page-width: 96%;
+    --sheet-margin: 0.25rem;
     --sheet-pad: 1.1rem;
     /* --photo is left alone: it already scales off --cover-h, which
        keeps responding correctly to the 33vh cap on short screens */
