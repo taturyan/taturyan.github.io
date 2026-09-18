@@ -264,7 +264,7 @@ a:hover { border-bottom-color: var(--accent); }
   height: 0.3rem;
   border-radius: 50%;
   background: var(--accent);
-  opacity: 0.65;
+  opacity: 1;
 }
 
 .content .talks-list {
@@ -302,7 +302,8 @@ a:hover { border-bottom-color: var(--accent); }
   position: absolute;
   inset-inline-start: 0;
   top: 0;
-  color: var(--ink-faint);
+  color: var(--accent);
+  opacity: 1;
   font-weight: 400;
 }
 
@@ -326,7 +327,7 @@ a:hover { border-bottom-color: var(--accent); }
   height: 0.3rem;
   border-radius: 50%;
   background: var(--accent);
-  opacity: 0.65;
+  opacity: 1;
 }
 
 .item__link {
