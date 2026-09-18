@@ -298,10 +298,13 @@ a:hover { border-bottom-color: var(--accent); }
 }
 
 .item__facts li::before {
-  content: "\2013";
+  content: "\2023";
   position: absolute;
   inset-inline-start: 0;
-  top: 0;
+  top: 0.875em;
+  line-height: 1;
+  transform: translateY(-50%) scale(1.1);
+  transform-origin: left center;
   color: var(--accent);
   opacity: 1;
   font-weight: 400;
