@@ -289,13 +289,12 @@ a:hover { border-bottom-color: var(--accent); }
 .talks-list > li.talk--poster::before  { background: var(--talk-poster); }
 
 /* the PhD defence gets a celebratory graduation cap instead of a dot,
-   centred where the dot would be (12px stays a whole number of screen
-   pixels at the usual zoom levels, like the 4px dots) */
+   centred where the dot would be */
 .talks-list > li.talk--defence::before {
-  inset-inline-start: calc(-1.1rem + 2px - 6px);
-  top: calc(0.75em - 6px);
-  width: 12px;
-  height: 12px;
+  inset-inline-start: calc(-1.1rem + 2px - 5px);
+  top: calc(0.75em - 5px);
+  width: 10px;
+  height: 10px;
   border-radius: 0;
   background: #8b1a1a;
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3 1 9l11 6 9-4.91V17h2V9L12 3zM5.18 13.18v4L12 21l6.82-3.82v-4L12 17l-6.82-3.82z'/%3E%3C/svg%3E") center / contain no-repeat;
