@@ -259,10 +259,12 @@ a:hover { border-bottom-color: var(--accent); }
   content: "";
   position: absolute;
   inset-inline-start: -1.1rem;
-  top: 0.75em;
-  transform: translateY(-50%);
-  width: 0.3rem;
-  height: 0.3rem;
+  /* 4px is a whole number of screen pixels at 100/125/150/175/200%
+     zoom, and with no transform every dot snaps to the pixel grid, so
+     they all render the same size instead of some looking bigger */
+  top: calc(0.75em - 2px);
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   background: var(--accent);
   opacity: 1;
@@ -278,13 +280,58 @@ a:hover { border-bottom-color: var(--accent); }
   margin-bottom: 1rem;
 }
 
-.talks-list > li::before { top: 0.75em; }
+/* talk type: bullet colour */
+.talks-list {
+  --talk-seminar: var(--accent);
+  --talk-poster: #a07a3c;
+  --talk-defence: #94493f;
+}
+.talks-list > li.talk--seminar::before { background: var(--talk-seminar); }
+.talks-list > li.talk--poster::before  { background: var(--talk-poster); }
+.talks-list > li.talk--defence::before { background: var(--talk-defence); }
+
+.talks-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 1.5rem;
+  /* same gap under the heading as .content h2 on the other tabs */
+  margin-bottom: 0.8rem;
+}
+.talks-head h2 { margin: 0; }
+
+.content .talks-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+  margin: 0 0 0 auto;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+  /* tight enough that the legend doesn't make the heading row taller
+     than a plain h2, so the first talk lines up with the other tabs */
+  line-height: 1;
+}
+.content .talks-legend li { display: inline-flex; align-items: center; gap: 0.45rem; margin: 0; }
+.content .talks-legend li::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--c);
+}
+.talks-legend .talk--seminar { --c: var(--accent); }
+.talks-legend .talk--poster  { --c: #a07a3c; }
+.talks-legend .talk--defence { --c: #94493f; }
 
 .talk__event {
   color: var(--ink);
   font-weight: 400;
   line-height: 1.5;
 }
+
+.talk__venue { font-weight: 500; }
 
 .item__meta { color: var(--ink-soft); font-size: 0.9375rem; line-height: 1.65; margin-top: 0.25rem; }
 
